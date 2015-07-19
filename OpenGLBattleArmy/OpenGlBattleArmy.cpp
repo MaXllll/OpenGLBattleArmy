@@ -13,8 +13,6 @@
 // Entete OpenGL 
 #define GLEW_STATIC 1
 #include <GL/glew.h>
-//#include <gl/GL.h>
-//#include "GL/glext.h"
 
 // FreeGLUT
 #include "GL/freeglut.h"
@@ -27,48 +25,91 @@
 #include <cmath>
 
 #include "EsgiShader.h"
-EsgiShader basicShader;
+#include "cube.h"
+
+#include <vector>
+
+EsgiShader cubeShader;
+EsgiShader gridShader;
 
 int previousTime = 0;
 
-GLuint cubeVBO;
-GLuint cubeIBO;
-GLuint textureObj;
+GLuint cubeVBO, cubeIBO, textureObj;
 
-#include "cube.h"
+GLuint gridVBO, gridVAO, gridEBO;
 
-/*
-struct Camera
+
+const GLuint GRID_W = 50, GRID_H = 50;
+std::vector<GLfloat> verticesGrid = std::vector<GLfloat>();
+std::vector<GLuint> indicesGrid = std::vector<GLuint>();
+
+std::vector<float> cubePosition = std::vector<float>();
+
+void calculateGrid()
 {
-	
-} g_Camera;*/
+	float incrementW = 0.1f;
+	float incrementH = 0.1f;
+
+	//float increment = GRID_H >= GRID_W?
+
+	//float incrementW = 3.f / GRID_W;
+	//float incrementH = 3.f / GRID_W;
+
+
+	for (float i = 0.f; i <= GRID_W; i += 1.f)
+	{
+		float yIncr = 0;
+		for (float j = 0.f; j <= GRID_H; j += 1.f)
+		{
+			verticesGrid.push_back(j * incrementW);
+			verticesGrid.push_back(i * incrementH);
+			verticesGrid.push_back(0);
+
+			if (j < GRID_H / 2)
+				yIncr += 0.1f;
+			else
+				yIncr -= 0.1f;
+		}
+	}
+
+	for (float i = 0.f; i < GRID_W; i += 1.f)
+	{
+		for (float j = 0.f; j < GRID_H; j += 1.f)
+		{
+			indicesGrid.push_back(i * (GRID_H + 1) + j);
+			indicesGrid.push_back((i + 1) * (GRID_H + 1) + (j + 1));
+			indicesGrid.push_back((i + 1) * (GRID_H + 1) + j);
+
+			indicesGrid.push_back(i * (GRID_H + 1) + j);
+			indicesGrid.push_back(i * (GRID_H + 1) + (j + 1));
+			indicesGrid.push_back((i + 1) * (GRID_H + 1) + j + 1);
+		}
+	}
+
+}
 
 void Initialize()
 {
-	printf("Version Pilote OpenGL : %s\n", glGetString(GL_VERSION));
-	printf("Type de GPU : %s\n", glGetString(GL_RENDERER));
-	printf("Fabricant : %s\n", glGetString(GL_VENDOR));
-	printf("Version GLSL : %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
-	int numExtensions;
-	glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
-	
+
+	calculateGrid();
+
 	GLenum error = glewInit();
 	if (error != GL_NO_ERROR) {
 		// TODO
 	}
 
-	for (int index = 0; index < numExtensions; ++index)
-	{
-		printf("Extension[%d] : %s\n", index, glGetStringi(GL_EXTENSIONS, index));
-	}
 	
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	//glFrontFace(GL_CW);
 
-	basicShader.LoadVertexShader("basic.vs");
-	basicShader.LoadFragmentShader("basic.fs");
-	basicShader.Create();
+	cubeShader.LoadVertexShader("cube.vs");
+	cubeShader.LoadFragmentShader("cube.fs");
+	cubeShader.Create();
+
+	gridShader.LoadVertexShader("grid.vs");
+	gridShader.LoadFragmentShader("grid.fs");
+	gridShader.Create();
 
 	glGenBuffers(1, &cubeVBO);
 	glGenBuffers(1, &cubeIBO);
@@ -81,6 +122,57 @@ void Initialize()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	previousTime = glutGet(GLUT_ELAPSED_TIME);
+
+	//Team1
+	cubePosition.push_back(2.f);
+	cubePosition.push_back(1.0f);
+	cubePosition.push_back(-0.5f);
+
+
+	cubePosition.push_back(5.f);
+	cubePosition.push_back(1.0f);
+	cubePosition.push_back(-0.5f);
+
+
+	cubePosition.push_back(8.f);
+	cubePosition.push_back(1.0f);
+	cubePosition.push_back(-0.5f);
+
+
+	cubePosition.push_back(3.5f);
+	cubePosition.push_back(3.0f);
+	cubePosition.push_back(-0.5f);
+
+
+	cubePosition.push_back(6.5f);
+	cubePosition.push_back(3.0f);
+	cubePosition.push_back(-0.5f);
+
+	////Team2
+	cubePosition.push_back(2.f);
+	cubePosition.push_back(8.5f);
+	cubePosition.push_back(-0.5f);
+
+
+	cubePosition.push_back(5.f);
+	cubePosition.push_back(8.5f);
+	cubePosition.push_back(-0.5f);
+
+
+	cubePosition.push_back(8.f);
+	cubePosition.push_back(8.5f);
+	cubePosition.push_back(-0.5f);
+
+
+	cubePosition.push_back(3.5f);
+	cubePosition.push_back(6.f);
+	cubePosition.push_back(-0.5f);
+
+
+	cubePosition.push_back(6.5f);
+	cubePosition.push_back(6.f);
+	cubePosition.push_back(-0.5f);
+
 }
 
 void Terminate()
@@ -88,11 +180,30 @@ void Terminate()
 	glDeleteTextures(1, &textureObj);
 	glDeleteBuffers(1, &cubeIBO);
 	glDeleteBuffers(1, &cubeVBO);
+	glDeleteBuffers(1, &gridEBO);
+	glDeleteBuffers(1, &gridVBO);
+	glDeleteBuffers(1, &gridVAO);
 
-	basicShader.Destroy();
+	cubeShader.Destroy();
+	gridShader.Destroy();
 }
 
-// ---
+
+#pragma region matrix transformation
+
+void MultiplyMatrix(float* matrixA, float* matrixB, float* result) {
+
+	memset(result, 0, sizeof(float) * 16);
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			float sum = 0.0;
+			for (int k = 0; k < 4; k++)
+				sum = sum + matrixA[i * 4 + k] * matrixB[k * 4 + j];
+			result[i * 4 + j] = sum;
+		}
+	}
+}
 
 void Identity(float *matrix)
 {
@@ -149,35 +260,120 @@ void Translate(float *matrix, float tx, float ty, float tz = 0.f)
 	matrix[15] = 1.f;
 }
 
-void Render()
+void Rotate(float *matrix, float deg, float x, float y, float z)
 {
-	glViewport(0, 0, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-	glClearColor(0.f, 0.0f, 0.0f, 1.0f);
-	glClearDepth(1.F);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	GLuint program = basicShader.GetProgram();
+	float matrixA[16];
+	memcpy(matrixA, matrix, sizeof(float) * 16);
+
+	float matrixB[16];
+	memset(matrixB, 0, sizeof(float) * 16);
+
+	//memset(matrix, 0, sizeof(float) * 16);
+	matrixB[0] = 1.f;
+	matrixB[5] = cos(deg);
+	matrixB[6] = -sin(deg);
+	matrixB[9] = sin(deg);
+	matrixB[10] = cos(deg);
+	matrixB[15] = 1.f;
+
+	MultiplyMatrix(matrixA, matrixB, matrix);
+}
+
+void scale(float *matrix, float x, float y, float z)
+{
+	float matrixA[16];
+	memcpy(matrixA, matrix, sizeof(float) * 16);
+
+	float matrixB[16];
+	memset(matrixB, 0, sizeof(float) * 16);
+
+	matrixB[0] = x;
+	matrixB[5] = y;
+	matrixB[10] = z;
+	matrixB[15] = 1.f;
+
+	MultiplyMatrix(matrixA, matrixB, matrix);
+}
+
+
+#pragma endregion
+
+void RenderGrid(float w, float h)
+{
+	gridShader.Bind();
+
+	GLuint program = gridShader.GetProgram();
 	glUseProgram(program);
 
-	float w = (float)glutGet(GLUT_WINDOW_WIDTH);
-	float h = (float)glutGet(GLUT_WINDOW_HEIGHT);
-	
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	glGenVertexArrays(1, &gridVAO);
+	glGenBuffers(1, &gridVBO);
+	glGenBuffers(1, &gridEBO);
+
+	glBindVertexArray(gridVAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, gridVBO);
+	glBufferData(GL_ARRAY_BUFFER, verticesGrid.size() * sizeof(float), &verticesGrid.front(), GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gridEBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesGrid.size() * sizeof(float), &indicesGrid.front(), GL_STATIC_DRAW);
+
+	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindVertexArray(0); // Unbind VAO
+
+	cubeShader.Bind();
+
+	float projection[16];
+	Perspective(projection, 45.f, w, h, 0.1f, 1000.f);
+	GLint projLocation = glGetUniformLocation(program, "u_projectionMatrix");
+	glUniformMatrix4fv(projLocation, 1, GL_FALSE, projection);
+
+	float viewTransform[16];
+	Identity(viewTransform);
+	viewTransform[12] = -2.5f;
+	viewTransform[13] =  -1.f;
+	viewTransform[14] = -5.0f;
+	GLint viewLocation = glGetUniformLocation(program, "u_viewMatrix");
+	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, viewTransform);
+
+	float worldTransform[16];
+	Identity(worldTransform);
+	Translate(worldTransform, 0.f, 0.0f, 0.f);
+	Rotate(worldTransform, 0, 1, 0, 0);
+	GLint worldLocation = glGetUniformLocation(program, "u_worldMatrix");
+	glUniformMatrix4fv(worldLocation, 1, GL_FALSE, worldTransform);
+
+	glBindVertexArray(gridVAO);
+	glDrawElements(GL_TRIANGLES, indicesGrid.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	gridShader.Unbind();
+}
+
+void RenderCube(float w, float h)
+{
+	GLuint program = cubeShader.GetProgram();
+	glUseProgram(program);
+
 	// passage des attributs de sommet au shader
 
 	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
 	GLint positionLocation = glGetAttribLocation(program, "a_position");
 	glEnableVertexAttribArray(positionLocation);
-	glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float)*3, 0);
+	glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
 
 	// variables uniformes (constantes) durant le rendu de la primitive
-	
+
 	float projection[16];
-	//Orthographic(projection, 0, w, h, 0, -1.f, 1.f);
 	Perspective(projection, 45.f, w, h, 0.1f, 1000.f);
-	//Identity(projection);
 	GLint projLocation = glGetUniformLocation(program, "u_projectionMatrix");
 	glUniformMatrix4fv(projLocation, 1, GL_FALSE, projection);
-	
+
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 	int delta = currentTime - previousTime;
 	previousTime = currentTime;
@@ -185,23 +381,62 @@ void Render()
 	time += delta/1000.f;
 	GLint timeLocation = glGetUniformLocation(program, "u_time");
 	glUniform1f(timeLocation, time);
-	
+
 	float viewTransform[16];
 	Identity(viewTransform);
-	viewTransform[14] = -7.0f;
+	//viewTransform[12] = 0.5f;
+	viewTransform[12] = -2.5f;
+	viewTransform[13] = -1.f;
+	viewTransform[14] = -5.0f;
 	GLint viewLocation = glGetUniformLocation(program, "u_viewMatrix");
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, viewTransform);
 
-	float worldTransform[16];
-	Identity(worldTransform);
-	Translate(worldTransform, 5.f * sin(time), 0.0f, 0.0F);
-	GLint worldLocation = glGetUniformLocation(program, "u_worldMatrix");
-	glUniformMatrix4fv(worldLocation, 1, GL_FALSE, worldTransform);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeIBO);
-	glDrawElements(GL_TRIANGLES, 6 * 2 * 3, GL_UNSIGNED_SHORT, 0);
+	for (int i = 0; i < cubePosition.size(); i+=3){
+
+		float worldTransform[16];
+		Identity(worldTransform);
+		Translate(worldTransform, cubePosition[i], cubePosition[i + 1] * sin(time), (cubePosition[i + 2] + 1) /* (sin(time) * 2*/);
+		scale(worldTransform, 0.5, 0.5, 0.5);
+		Rotate(worldTransform, 0, 1, 0, 0);
+		GLint worldLocation = glGetUniformLocation(program, "u_worldMatrix");
+		glUniformMatrix4fv(worldLocation, 1, GL_FALSE, worldTransform);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeIBO);
+		glDrawElements(GL_TRIANGLES, 6 * 2 * 3, GL_UNSIGNED_SHORT, 0);
+	}
+
+	//float worldTransform2[16];
+	//Identity(worldTransform2);
+	//Translate(worldTransform2, 2.f, 0.0f, 0.0f);
+	//Rotate(worldTransform2, 1, 1, 0, 0);
+	//scale(worldTransform2, 0.1, 0.1, 0.1);
+	//GLint worldLocation2 = glGetUniformLocation(program, "u_worldMatrix");
+	//glUniformMatrix4fv(worldLocation2, 1, GL_FALSE, worldTransform2);
+
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeIBO);
+	//glDrawElements(GL_TRIANGLES, 6 * 2 * 3, GL_UNSIGNED_SHORT, 0);
 
 	glUseProgram(0);
+
+	cubeShader.Unbind();
+}
+
+
+void Render()
+{
+	glViewport(0, 0, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	//glClearDepth(1.F);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	float w = (float)glutGet(GLUT_WINDOW_WIDTH);
+	float h = (float)glutGet(GLUT_WINDOW_HEIGHT);
+
+	RenderGrid(w, h);
+
+	RenderCube(w, h);
+	
 
 	glutSwapBuffers();
 	glutPostRedisplay();

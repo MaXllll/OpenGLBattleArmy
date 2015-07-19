@@ -32,8 +32,8 @@ void main(void)
 	vec3 L = normalize(c_lightDirection);
 	float NdotL = max(dot(v_normal, L), 0.0);
 	
-	v_color = vec4(1.0, 1.0, 0.0, 1.0) * NdotL;
+	v_color =  vec4(1.0f, 0.5f, 0.2f, 1.0f) * NdotL;
 #else
-	v_color = vec4(1.0, 1.0, 0.0, 1.0);
+	v_color =  vec4(1.0f, 0.5f, 0.2f, 1.0f);
 #endif
 }

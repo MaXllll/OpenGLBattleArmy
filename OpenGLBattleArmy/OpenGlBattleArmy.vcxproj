@@ -87,6 +87,7 @@
     <ClCompile Include="EsgiShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cube.h" />
     <ClInclude Include="ESGIShader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
