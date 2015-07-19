@@ -344,7 +344,7 @@ void RenderGrid(float w, float h)
 	float worldTransform[16];
 	Identity(worldTransform);
 	Translate(worldTransform, 0.f, 0.0f, 0.f);
-	Rotate(worldTransform, 0, 1, 0, 0);
+	Rotate(worldTransform, 1, 1, 0, 0);
 	GLint worldLocation = glGetUniformLocation(program, "u_worldMatrix");
 	glUniformMatrix4fv(worldLocation, 1, GL_FALSE, worldTransform);
 
@@ -396,9 +396,9 @@ void RenderCube(float w, float h)
 
 		float worldTransform[16];
 		Identity(worldTransform);
-		Translate(worldTransform, cubePosition[i], cubePosition[i + 1] * sin(time), (cubePosition[i + 2] + 1) /* (sin(time) * 2*/);
+		Translate(worldTransform, cubePosition[i], cubePosition[i + 1] /* sin(time)*/, (cubePosition[i + 2] + 1) /* (sin(time) * 2*/);
+		Rotate(worldTransform, 1, 1, 0, 0);
 		scale(worldTransform, 0.5, 0.5, 0.5);
-		Rotate(worldTransform, 0, 1, 0, 0);
 		GLint worldLocation = glGetUniformLocation(program, "u_worldMatrix");
 		glUniformMatrix4fv(worldLocation, 1, GL_FALSE, worldTransform);
 
