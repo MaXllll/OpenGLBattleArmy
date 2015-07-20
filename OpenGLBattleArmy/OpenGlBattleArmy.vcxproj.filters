@@ -16,6 +16,24 @@
     <Filter Include="Header Files\Capacity">
       <UniqueIdentifier>{182c2e8d-9c5b-4dce-82ac-da2e1c421bc9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Actions">
+      <UniqueIdentifier>{187d932c-5f60-48ce-93b9-57323166bfec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Decisions">
+      <UniqueIdentifier>{46687a22-b7a7-4b51-8179-a3337b66effb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IA">
+      <UniqueIdentifier>{e53f1c7b-78e2-4f7d-b551-416ab244d5e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tools">
+      <UniqueIdentifier>{c450fc7b-b4e1-4c48-9c8b-412fc2c6db00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Filters">
+      <UniqueIdentifier>{1d9350ad-a988-4dc4-9770-f0b663c1b6b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Decisions">
+      <UniqueIdentifier>{46d05d89-26ac-4c59-b5cf-30aa7aecf2b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -27,9 +45,6 @@
     <ClCompile Include="OpenGlBattleArmy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ActionNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -37,9 +52,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="battle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DecisionNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -50,6 +62,12 @@
     </ClCompile>
     <ClCompile Include="Unit.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionNode.cpp">
+      <Filter>Source Files\Decisions</Filter>
+    </ClCompile>
+    <ClCompile Include="DecisionNode.cpp">
+      <Filter>Source Files\Decisions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,49 +86,13 @@
     <ClInclude Include="include\configs.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Point.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\training.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Unit.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Capacity\LifeCapacity.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Actions\Action.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Actions\EmptyAction.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Actions\ShotAction.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\DecisionTree\ActionNode.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\DecisionTree\DecisionNode.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\DecisionTree\INode.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Filters\IFilters.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\IA\AI.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\IA\TreeIA.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Capacity\ArmorCapacity.hpp">
-      <Filter>Header Files\Capacity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Actions\MoveAction.hpp">
       <Filter>Header Files\Capacity</Filter>
     </ClInclude>
     <ClInclude Include="include\Capacity\FirerateCapacity.hpp">
@@ -130,6 +112,42 @@
     </ClInclude>
     <ClInclude Include="include\Capacity\Capacity.hpp">
       <Filter>Header Files\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\Action.hpp">
+      <Filter>Header Files\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\ShotAction.hpp">
+      <Filter>Header Files\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\EmptyAction.hpp">
+      <Filter>Header Files\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\MoveAction.hpp">
+      <Filter>Header Files\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\LifeCapacity.hpp">
+      <Filter>Header Files\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DecisionTree\DecisionNode.hpp">
+      <Filter>Header Files\Decisions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DecisionTree\INode.hpp">
+      <Filter>Header Files\Decisions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DecisionTree\ActionNode.hpp">
+      <Filter>Header Files\Decisions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IA\TreeIA.hpp">
+      <Filter>Header Files\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IA\AI.hpp">
+      <Filter>Header Files\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Filters\IFilters.hpp">
+      <Filter>Header Files\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Point.hpp">
+      <Filter>Header Files\Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
