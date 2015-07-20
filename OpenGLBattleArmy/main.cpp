@@ -11,7 +11,7 @@ void unitTest()
 {
 
 }
-
+/* 
 int main(void)
 {
     std::srand(static_cast<unsigned int>(time(nullptr)));
@@ -42,4 +42,4 @@ int main(void)
     }
 
     return 0;
-}
+}*/

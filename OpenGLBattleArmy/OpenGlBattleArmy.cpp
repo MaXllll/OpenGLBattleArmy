@@ -26,6 +26,13 @@
 
 #include "EsgiShader.h"
 #include "cube.h"
+#include "Army.hpp"
+#include <cstdlib>
+#include <time.h>
+#include <iostream>
+#include "training.hpp"
+#include "fstream"
+
 
 #include <vector>
 
@@ -45,8 +52,42 @@ std::vector<GLuint> indicesGrid = std::vector<GLuint>();
 
 std::vector<float> cubePosition = std::vector<float>();
 
+void beginBattle(){
+
+	std::srand(static_cast<unsigned int>(time(nullptr)));
+	std::vector<std::unique_ptr<Army> > champions;
+	try
+	{
+		std::ifstream in("Army_10_100.save");
+		Army army = Army::load(in);
+		std::cout << army << std::endl;
+		champions.push_back(std::unique_ptr<Army>(new Army(army)));
+	}
+	catch (...)
+	{
+	}
+
+	try
+	{
+		std::unique_ptr<Army> army = train(10, 100, 20, 10, 100, champions);
+		std::cout << *army << std::endl;
+		std::ofstream out("Army_10_100.save");
+		army->save(out);
+		out.flush();
+		out.close();
+	}
+	catch (std::invalid_argument& e)
+	{
+		std::cout << "toto" << std::endl;
+	}
+}
+
+
 void calculateGrid()
 {
+	verticesGrid.clear();
+	indicesGrid.clear();
+
 	float incrementW = 0.1f;
 	float incrementH = 0.1f;
 
@@ -54,7 +95,6 @@ void calculateGrid()
 
 	//float incrementW = 3.f / GRID_W;
 	//float incrementH = 3.f / GRID_W;
-
 
 	for (float i = 0.f; i <= GRID_W; i += 1.f)
 	{
@@ -91,14 +131,16 @@ void calculateGrid()
 void Initialize()
 {
 
-	calculateGrid();
 
 	GLenum error = glewInit();
 	if (error != GL_NO_ERROR) {
 		// TODO
 	}
 
-	
+	std::cout << "beginBattle" << std::endl;
+	//beginBattle();
+	std::cout << "endBattle" << std::endl;
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	//glFrontFace(GL_CW);
@@ -301,6 +343,8 @@ void scale(float *matrix, float x, float y, float z)
 
 void RenderGrid(float w, float h)
 {
+
+	calculateGrid();
 	gridShader.Bind();
 
 	GLuint program = gridShader.GetProgram();
