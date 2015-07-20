@@ -83,12 +83,44 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ActionNode.cpp" />
+    <ClCompile Include="AI.cpp" />
+    <ClCompile Include="Army.cpp" />
+    <ClCompile Include="battle.cpp" />
+    <ClCompile Include="DecisionNode.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="OpenGlBattleArmy.cpp" />
     <ClCompile Include="EsgiShader.cpp" />
+    <ClCompile Include="training.cpp" />
+    <ClCompile Include="Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube.h" />
     <ClInclude Include="ESGIShader.h" />
+    <ClInclude Include="include\Actions\Action.hpp" />
+    <ClInclude Include="include\Actions\EmptyAction.hpp" />
+    <ClInclude Include="include\Actions\MoveAction.hpp" />
+    <ClInclude Include="include\Actions\ShotAction.hpp" />
+    <ClInclude Include="include\Army.hpp" />
+    <ClInclude Include="include\battle.hpp" />
+    <ClInclude Include="include\Capacity\ArmorCapacity.hpp" />
+    <ClInclude Include="include\Capacity\Capacity.hpp" />
+    <ClInclude Include="include\Capacity\DamageCapacity.hpp" />
+    <ClInclude Include="include\Capacity\FirerateCapacity.hpp" />
+    <ClInclude Include="include\Capacity\LifeCapacity.hpp" />
+    <ClInclude Include="include\Capacity\RangeCapacity.hpp" />
+    <ClInclude Include="include\Capacity\RegenCapacity.hpp" />
+    <ClInclude Include="include\Capacity\SpeedCapacity.hpp" />
+    <ClInclude Include="include\configs.hpp" />
+    <ClInclude Include="include\DecisionTree\ActionNode.hpp" />
+    <ClInclude Include="include\DecisionTree\DecisionNode.hpp" />
+    <ClInclude Include="include\DecisionTree\INode.hpp" />
+    <ClInclude Include="include\Filters\IFilters.hpp" />
+    <ClInclude Include="include\IA\AI.hpp" />
+    <ClInclude Include="include\IA\TreeIA.hpp" />
+    <ClInclude Include="include\Point.hpp" />
+    <ClInclude Include="include\training.hpp" />
+    <ClInclude Include="include\Unit.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

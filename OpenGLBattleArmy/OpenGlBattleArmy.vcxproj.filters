@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Capacity">
+      <UniqueIdentifier>{182c2e8d-9c5b-4dce-82ac-da2e1c421bc9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -24,6 +27,30 @@
     <ClCompile Include="OpenGlBattleArmy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ActionNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Army.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="battle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DecisionNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="training.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ESGIShader.h">
@@ -31,6 +58,78 @@
     </ClInclude>
     <ClInclude Include="cube.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Army.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\battle.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\configs.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Point.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\training.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Unit.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\LifeCapacity.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\Action.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\EmptyAction.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\ShotAction.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DecisionTree\ActionNode.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DecisionTree\DecisionNode.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DecisionTree\INode.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Filters\IFilters.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IA\AI.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IA\TreeIA.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\ArmorCapacity.hpp">
+      <Filter>Header Files\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Actions\MoveAction.hpp">
+      <Filter>Header Files\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\FirerateCapacity.hpp">
+      <Filter>Header Files\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\DamageCapacity.hpp">
+      <Filter>Header Files\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\RangeCapacity.hpp">
+      <Filter>Header Files\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\RegenCapacity.hpp">
+      <Filter>Header Files\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\SpeedCapacity.hpp">
+      <Filter>Header Files\Capacity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capacity\Capacity.hpp">
+      <Filter>Header Files\Capacity</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
