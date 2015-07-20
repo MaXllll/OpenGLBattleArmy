@@ -1,5 +1,6 @@
 
 attribute vec4 a_position;
+uniform int u_team;
 
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
@@ -14,6 +15,8 @@ const vec3 c_lightDirection = vec3(1.0, 1.0, 0.0);
 
 void main(void)
 {
+	
+
 	gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * a_position;
 
 	// solution 1 : mettre le w a 0
@@ -31,9 +34,16 @@ void main(void)
 #if VERTEX_LIGHTING
 	vec3 L = normalize(c_lightDirection);
 	float NdotL = max(dot(v_normal, L), 0.0);
-	
-	v_color =  vec4(1.0f, 0.5f, 0.2f, 1.0f) * NdotL;
+	if(u_team == 1){
+		v_color =  vec4(1.0f, 0.5f, 0.2f, 1.0f) * NdotL;
+	}else{
+		v_color = vec4(1.0f,1.0f,0.3f,1.0f) * NdotL;
+	}
 #else
-	v_color =  vec4(1.0f, 0.5f, 0.2f, 1.0f);
+	if(u_team == 1){
+		v_color =  vec4(1.0f, 0.5f, 0.2f, 1.0f);
+	}else{
+		v_color = vec4(1.0f,1.0f,0.3f,1.0f);
+	}
 #endif
 }

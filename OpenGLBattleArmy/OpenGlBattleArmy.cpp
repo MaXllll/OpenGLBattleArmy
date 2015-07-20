@@ -27,12 +27,16 @@
 #include "EsgiShader.h"
 #include "cube.h"
 #include "Army.hpp"
+#include "battle.hpp"
+#include "IA/AI.hpp"
+
+
 #include <cstdlib>
 #include <time.h>
 #include <iostream>
 #include "training.hpp"
 #include "fstream"
-
+#include <thread>
 
 #include <vector>
 
@@ -50,38 +54,161 @@ const GLuint GRID_W = 50, GRID_H = 50;
 std::vector<GLfloat> verticesGrid = std::vector<GLfloat>();
 std::vector<GLuint> indicesGrid = std::vector<GLuint>();
 
-std::vector<float> cubePosition = std::vector<float>();
+std::vector<float> cubePositionA1 = std::vector<float>();
+std::vector<float> cubePositionA2 = std::vector<float>();
+
+Army army1 = Army(10, 100);
+Army army2 = Army(10, 100);
+
+float transformCoordinates(float coord){
+	return (coord / 500) * 40;
+}
+
+//Struct used to manipulate a unit together with its army and its opponents
+struct UnitChoice {
+	Army* army;
+	Army* opponents;
+	int unitId;
+	UnitChoice(int id, Army* a, Army* o) :unitId(id), army(a), opponents(o) {}
+};
+
+//Run a fight between the two given armies, and store their score in the given variable.
+void fightLocal(bool log)
+{
+	cubePositionA1.clear();
+	cubePositionA2.clear();
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	if (log) {
+		std::cout << "-------------------------------" << std::endl;
+		std::cout << "FIGHT" << std::endl;
+		std::cout << "-------------------------------" << std::endl;
+	}
+
+	Army A = army1;
+	Army B = army2;
+	AI ai;
+	int turn = 1;
+	//while (A.size()>0 && B.size()>0 && turn++ < 10000) {
+
+	if (log) {
+		std::cout << "-------------------------------" << std::endl;
+		std::cout << "Turn " << (turn) << std::endl;
+		std::cout << "-------------------------------" << std::endl;
+	}
+
+	std::vector<UnitChoice> order;
+	std::transform(A.getUnitsList().begin(), A.getUnitsList().end(), std::back_inserter(order),
+		[&A, &B](std::unique_ptr<Unit>& u) {
+		u->refresh();
+		return UnitChoice(u->getId(), &A, &B);
+	});
+	std::transform(B.getUnitsList().begin(), B.getUnitsList().end(), std::back_inserter(order),
+		[&A, &B](std::unique_ptr<Unit>& u) {
+		u->refresh();
+		return UnitChoice(u->getId(), &B, &A);
+	});
+	std::random_shuffle(order.begin(), order.end());
+
+	for (auto it = order.begin(); it != order.end(); it++) {
+		try {
+			if (log)std::cout << "Unit#" << it->unitId << " (Army " << ((it->army) == &A ? "A" : "B") << ") : ";
+			Unit& unit = it->army->getUnit(it->unitId);
+			std::unique_ptr<Action> action = ai(unit, *(it->army), *(it->opponents));
+			action->execute(log);
+			it->opponents->purge();
+		}
+		catch (std::invalid_argument e) {
+
+			//can happens if the unit is already dead or if an army is empty
+			continue;
+		}
+	}
+	//}
+
+	std::vector<std::unique_ptr<Unit>>& unitsA1 = A.getUnitsList();
+	std::vector<std::unique_ptr<Unit>>& unitsA2 = B.getUnitsList();
+
+	for (auto it = unitsA1.begin(); it != unitsA1.end(); ++it) {
+		cubePositionA1.push_back(transformCoordinates((*it)->getPosition().getX() + 10));
+		cubePositionA1.push_back(transformCoordinates((*it)->getPosition().getY()));
+		cubePositionA1.push_back(-0.5f);
+	}
+
+	for (auto it = unitsA2.begin(); it != unitsA2.end(); ++it) {
+		cubePositionA2.push_back(transformCoordinates((*it)->getPosition().getX() + 10));
+		cubePositionA2.push_back(transformCoordinates((*it)->getPosition().getY()));
+		cubePositionA2.push_back(-0.5f);
+	}
+
+	if (log) {
+		if (A.size() == 0) {
+			std::cout << "Army B win " << B.size() << " to 0" << std::endl;
+		}
+		else {
+			std::cout << "Army A win " << A.size() << " to 0" << std::endl;
+		}
+	}
+	//scoreA = A.size() - B.size();
+	//scoreB = B.size() - A.size();
+	//if (scoreA < 0)scoreA = 0;
+	//if (scoreB < 0)scoreB = 0;
+	//if (log) {
+	//	std::cout << "-------------------------------" << std::endl;
+	//	std::cout << "END FIGHT" << std::endl;
+	//	std::cout << "-------------------------------" << std::endl;
+	//}
+
+}
+
 
 void beginBattle(){
 
-	std::srand(static_cast<unsigned int>(time(nullptr)));
-	std::vector<std::unique_ptr<Army> > champions;
-	try
-	{
-		std::ifstream in("Army_10_100.save");
-		Army army = Army::load(in);
-		std::cout << army << std::endl;
-		champions.push_back(std::unique_ptr<Army>(new Army(army)));
-	}
-	catch (...)
-	{
+	//std::srand(static_cast<unsigned int>(time(nullptr)));
+	//std::vector<std::unique_ptr<Army> > champions;
+	//try
+	//{
+	//	std::ifstream in("Army_10_100.save");
+	//	Army army = Army::load(in);
+	//	std::cout << army << std::endl;
+	//	champions.push_back(std::unique_ptr<Army>(new Army(army)));
+	//}
+	//catch (...)
+	//{
+	//}
+
+	//try
+	//{
+	//	std::unique_ptr<Army> army = train(10, 100, 20, 10, 100, champions);
+	//	std::cout << *army << std::endl;
+	//	std::ofstream out("Army_10_100.save");
+	//	army->save(out);
+	//	out.flush();
+	//	out.close();
+	//}
+	//catch (std::invalid_argument& e)
+	//{
+	//	std::cout << "toto" << std::endl;
+	//}
+
+
+
+	std::vector<std::unique_ptr<Unit>>& unitsA1 = army1.getUnitsList();
+	std::vector<std::unique_ptr<Unit>>& unitsA2 = army1.getUnitsList();
+	//army2.get;
+	int sA, sB;
+	for (auto it = unitsA1.begin(); it != unitsA1.end(); ++it) {
+		cubePositionA1.push_back(transformCoordinates((*it)->getPosition().getX()+100));
+		cubePositionA1.push_back(transformCoordinates((*it)->getPosition().getY()));
+		cubePositionA1.push_back(-0.5f);
 	}
 
-	try
-	{
-		std::unique_ptr<Army> army = train(10, 100, 20, 10, 100, champions);
-		std::cout << *army << std::endl;
-		std::ofstream out("Army_10_100.save");
-		army->save(out);
-		out.flush();
-		out.close();
+	for (auto it = unitsA2.begin(); it != unitsA2.end(); ++it) {
+		cubePositionA2.push_back(transformCoordinates((*it)->getPosition().getX()+100));
+		cubePositionA2.push_back(transformCoordinates((*it)->getPosition().getY()));
+		cubePositionA2.push_back(-0.5f);
 	}
-	catch (std::invalid_argument& e)
-	{
-		std::cout << "toto" << std::endl;
-	}
+	fightLocal(true);	
 }
-
 
 void calculateGrid()
 {
@@ -138,7 +265,7 @@ void Initialize()
 	}
 
 	std::cout << "beginBattle" << std::endl;
-	//beginBattle();
+	beginBattle();
 	std::cout << "endBattle" << std::endl;
 
 	glEnable(GL_DEPTH_TEST);
@@ -164,57 +291,7 @@ void Initialize()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	previousTime = glutGet(GLUT_ELAPSED_TIME);
-
-	//Team1
-	cubePosition.push_back(2.f);
-	cubePosition.push_back(1.0f);
-	cubePosition.push_back(-0.5f);
-
-
-	cubePosition.push_back(5.f);
-	cubePosition.push_back(1.0f);
-	cubePosition.push_back(-0.5f);
-
-
-	cubePosition.push_back(8.f);
-	cubePosition.push_back(1.0f);
-	cubePosition.push_back(-0.5f);
-
-
-	cubePosition.push_back(3.5f);
-	cubePosition.push_back(3.0f);
-	cubePosition.push_back(-0.5f);
-
-
-	cubePosition.push_back(6.5f);
-	cubePosition.push_back(3.0f);
-	cubePosition.push_back(-0.5f);
-
-	////Team2
-	cubePosition.push_back(2.f);
-	cubePosition.push_back(8.5f);
-	cubePosition.push_back(-0.5f);
-
-
-	cubePosition.push_back(5.f);
-	cubePosition.push_back(8.5f);
-	cubePosition.push_back(-0.5f);
-
-
-	cubePosition.push_back(8.f);
-	cubePosition.push_back(8.5f);
-	cubePosition.push_back(-0.5f);
-
-
-	cubePosition.push_back(3.5f);
-	cubePosition.push_back(6.f);
-	cubePosition.push_back(-0.5f);
-
-
-	cubePosition.push_back(6.5f);
-	cubePosition.push_back(6.f);
-	cubePosition.push_back(-0.5f);
-
+	
 }
 
 void Terminate()
@@ -436,19 +513,40 @@ void RenderCube(float w, float h)
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, viewTransform);
 
 
-	for (int i = 0; i < cubePosition.size(); i+=3){
+	for (int i = 0; i < cubePositionA1.size(); i+=3){
 
 		float worldTransform[16];
 		Identity(worldTransform);
-		Translate(worldTransform, cubePosition[i], cubePosition[i + 1] /* sin(time)*/, (cubePosition[i + 2] + 1) /* (sin(time) * 2*/);
+		Translate(worldTransform, cubePositionA1[i], cubePositionA1[i + 1] /* sin(time)*/, (cubePositionA1[i + 2] + 1) /* (sin(time) * 2*/);
 		Rotate(worldTransform, 1, 1, 0, 0);
 		scale(worldTransform, 0.5, 0.5, 0.5);
 		GLint worldLocation = glGetUniformLocation(program, "u_worldMatrix");
 		glUniformMatrix4fv(worldLocation, 1, GL_FALSE, worldTransform);
 
+		GLint team = glGetUniformLocation(program, "u_team");
+		glUniform1i(team, 0);
+
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeIBO);
 		glDrawElements(GL_TRIANGLES, 6 * 2 * 3, GL_UNSIGNED_SHORT, 0);
 	}
+
+	for (int i = 0; i < cubePositionA2.size(); i += 3){
+
+		float worldTransform[16];
+		Identity(worldTransform);
+		Translate(worldTransform, cubePositionA2[i], cubePositionA2[i + 1] /* sin(time)*/, (cubePositionA2[i + 2] + 1) /* (sin(time) * 2*/);
+		Rotate(worldTransform, 1, 1, 0, 0);
+		scale(worldTransform, 0.5, 0.5, 0.5);
+		GLint worldLocation = glGetUniformLocation(program, "u_worldMatrix");
+		glUniformMatrix4fv(worldLocation, 1, GL_FALSE, worldTransform);
+
+		GLint team = glGetUniformLocation(program, "u_team");
+		glUniform1i(team, 1);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeIBO);
+		glDrawElements(GL_TRIANGLES, 6 * 2 * 3, GL_UNSIGNED_SHORT, 0);
+	}
+
 
 	//float worldTransform2[16];
 	//Identity(worldTransform2);
@@ -480,7 +578,7 @@ void Render()
 	RenderGrid(w, h);
 
 	RenderCube(w, h);
-	
+	fightLocal(true);
 
 	glutSwapBuffers();
 	glutPostRedisplay();

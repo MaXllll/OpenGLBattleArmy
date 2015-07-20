@@ -171,7 +171,8 @@ public:
     //Return true if the unit have still life, false otherwise.
     bool isAlive()const
     {
-        return const_cast< Unit * const>(this)->getLife().isAlive();
+		bool isA = const_cast<Unit* const>(this)->getLife().isAlive();
+		return isA;
     }
 
     //Provide a randomly mutated version of the current unit

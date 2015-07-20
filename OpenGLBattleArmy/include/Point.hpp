@@ -83,6 +83,20 @@ public:
         return *this;
     }
 
+	//Point& operator+=(const Point& p)
+	//{
+	//	x_ += p.x_;
+	//	y_ += p.y_;
+	//	return *this;
+	//}
+
+	//Point& operator-=(const Point& p)
+	//{
+	//	x_ -= p.x_;
+	//	y_ -= p.y_;
+	//	return *this;
+	//}
+
     Point& operator*=(float s)
     {
         x_*=s;

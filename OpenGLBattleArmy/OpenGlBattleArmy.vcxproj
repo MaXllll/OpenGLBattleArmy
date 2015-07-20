@@ -88,7 +88,6 @@
     <ClCompile Include="Army.cpp" />
     <ClCompile Include="battle.cpp" />
     <ClCompile Include="DecisionNode.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="OpenGlBattleArmy.cpp" />
     <ClCompile Include="EsgiShader.cpp" />
     <ClCompile Include="training.cpp" />

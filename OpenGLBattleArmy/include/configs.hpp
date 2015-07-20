@@ -5,7 +5,7 @@
 
 class Configs{
 	public:
-		const static int WIDTH = 100;
-		const static int HEIGHT = 100;
+		const static int WIDTH = 500;
+		const static int HEIGHT = 500;
 };
 #endif

@@ -54,9 +54,6 @@
     <ClCompile Include="battle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="training.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
